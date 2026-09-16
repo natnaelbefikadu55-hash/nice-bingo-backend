@@ -17,8 +17,8 @@ const io = new Server(server, {
   cors: { origin: "*", methods: ["GET", "POST"] }
 });
 
-// 1. መረጃዎች
-const BOT_TOKEN = process.env.BOT_TOKEN || '8968682397:AAHzaLWI-jsyf4e4l02njeGr_xUqlmgedok';
+// 1. መረጃዎች - Bot Token ከ Render Environment Variable ይወሰዳል
+const BOT_TOKEN = process.env.BOT_TOKEN;
 const TELEBIRR_NUMBER = '0930488187';
 
 const bot = new Telegraf(BOT_TOKEN);
