@@ -7,20 +7,24 @@ const { Telegraf, Markup } = require('telegraf');
 const app = express();
 app.use(cors());
 
+// Render ጤናማ መሆኑን ማረጋገጫ (Health Check)
+app.get('/', (req, res) => {
+  res.send('Nice Bingo Server & Telegram Bot are running live!');
+});
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: "*", methods: ["GET", "POST"] }
 });
 
-// 1. የቴሌግራም ቦት እና የአድሚን መረጃዎች
+// 1. መረጃዎች
 const BOT_TOKEN = process.env.BOT_TOKEN || '8968682397:AAHzaLWI-jsyf4e4l02njeGr_xUqlmgedok';
-const ADMIN_CHAT_ID = '1921121534';
 const TELEBIRR_NUMBER = '0930488187';
 
 const bot = new Telegraf(BOT_TOKEN);
 const userBalances = {};
 
-// የላቁ ቁልፎች (Reply Keyboard)
+// የቁልፍ አደራደር
 const mainKeyboard = Markup.keyboard([
   [Markup.button.webApp('🎮 Play Now', 'https://natnael-befikadu.vercel.app/?v=1.1')],
   ['💰 Balance', '📥 Deposit'],
@@ -60,8 +64,6 @@ bot.hears('📤 Withdraw', (ctx) => {
 });
 
 bot.hears('🆘 Support', (ctx) => ctx.reply('💬 ማንኛውንም ጥያቄ ለማቅረብ አድሚንን ያውሩ፦ @MamaNB30'));
-
-bot.launch().then(() => console.log('Telegram Bot successfully started!')).catch(err => console.error(err));
 
 // 2. የቢንጎ ጨዋታ ሎጅክ
 let timer = 30;
@@ -139,7 +141,17 @@ io.on('connection', (socket) => {
 
 startTimer();
 
+// 3. ሰርቨሩን ማስነሳት እና ቦቱን ማስጀመር
 const PORT = process.env.PORT || 10000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  
+  // ቦቱን ከሰርቨሩ በኋላ ማስነሳት
+  bot.launch()
+    .then(() => console.log('Telegram Bot successfully started!'))
+    .catch((err) => console.error('Bot launch error:', err));
 });
+
+// ሰርቨሩ በሰላም እንዲዘጋ
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
