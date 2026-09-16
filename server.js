@@ -13,12 +13,12 @@ const io = new Server(server, {
 });
 
 // 1. የቴሌግራም ቦት እና የአድሚን መረጃዎች
-const BOT_TOKEN = '8968682397:AAHzaLWI-jsyf4e4l02njeGr_xUqlmgedok';
-const ADMIN_CHAT_ID = '1921121534'; // የእርስዎ ቴሌግራም ID
-const TELEBIRR_NUMBER = '0930488187'; // የእርስዎ Telebirr ቁጥር
+const BOT_TOKEN = process.env.BOT_TOKEN || '8968682397:AAHzaLWI-jsyf4e4l02njeGr_xUqlmgedok';
+const ADMIN_CHAT_ID = '1921121534';
+const TELEBIRR_NUMBER = '0930488187';
 
 const bot = new Telegraf(BOT_TOKEN);
-const userBalances = {}; // የተጫዋቾች ቀሪ ሂሳብ መያዣ
+const userBalances = {};
 
 // የላቁ ቁልፎች (Reply Keyboard)
 const mainKeyboard = Markup.keyboard([
@@ -37,14 +37,12 @@ bot.start((ctx) => {
   ctx.reply(`👋 Welcome back, ${ctx.from.first_name}!\n\nSystem online. Ready to win?`, mainKeyboard);
 });
 
-// 💰 Balance
 bot.hears('💰 Balance', (ctx) => {
   const userId = ctx.from.id;
   const balance = userBalances[userId] || 0;
   ctx.reply(`💳 የእርስዎ ቀሪ ሂሳብ፦ ${balance} ETB`);
 });
 
-// 📥 Deposit መመሪያ
 bot.hears('📥 Deposit', (ctx) => {
   ctx.reply(
     `📥 *ገንዘብ ገቢ ለማድረግ (Deposit)*\n\n` +
@@ -55,19 +53,17 @@ bot.hears('📥 Deposit', (ctx) => {
   );
 });
 
-// 📤 Withdraw መመሪያ
 bot.hears('📤 Withdraw', (ctx) => {
   const userId = ctx.from.id;
   const balance = userBalances[userId] || 0;
   ctx.reply(`📤 ገንዘብ ለማውጣት ያላችሁ ቀሪ ሂሳብ፦ ${balance} ETB\n\nለማውጣት የሚፈልጉትን መጠን እና የ Telebirr ቁጥርዎን ለ Support ይላኩ።`);
 });
 
-// የቪአይፒ እና ሰፖርት መልእክቶች
 bot.hears('🆘 Support', (ctx) => ctx.reply('💬 ማንኛውንም ጥያቄ ለማቅረብ አድሚንን ያውሩ፦ @MamaNB30'));
 
 bot.launch().then(() => console.log('Telegram Bot successfully started!')).catch(err => console.error(err));
 
-// 2. የቢንጎ ጨዋታ ሎጅክ (Backend Loop)
+// 2. የቢንጎ ጨዋታ ሎጅክ
 let timer = 30;
 let jackpot = 1000;
 let drawnNumbers = [];
@@ -106,7 +102,6 @@ function startGame() {
       clearInterval(gameInterval);
       isGameRunning = false;
       io.emit('game_over', { message: "ጨዋታው ተጠናቋል! አዲስ ጨዋታ ይጀምራል..." });
-      
       setTimeout(startTimer, 5000);
       return;
     }
@@ -144,7 +139,7 @@ io.on('connection', (socket) => {
 
 startTimer();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
