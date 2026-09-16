@@ -50,7 +50,6 @@ function startGame() {
       isGameRunning = false;
       io.emit('game_over', { message: "ጨዋታው ተጠናቋል! አዲስ ጨዋታ ይጀምራል..." });
       
-      // ከ 5 ሰከንድ በኋላ አውቶማቲክ አዲስ ቆጣሪ ያስጀምራል
       setTimeout(startTimer, 5000);
       return;
     }
@@ -64,7 +63,7 @@ function startGame() {
       isGameRunning: true
     });
 
-  }, 2000); // በየ 2 ሰከንዱ ቁጥር ያወጣል
+  }, 2000);
 }
 
 io.on('connection', (socket) => {
