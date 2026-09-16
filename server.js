@@ -14,8 +14,8 @@ const io = new Server(server, {
 
 // 1. የቴሌግራም ቦት እና የአድሚን መረጃዎች
 const BOT_TOKEN = '8968682397:AAHzaLWI-jsyf4e4l02njeGr_xUqlmgedok';
-const ADMIN_CHAT_ID = 'YOUR_TELEGRAM_USER_ID'; // እዚህ ላይ የእርስዎን የቴሌግራም ID ያስገቡ
-const TELEBIRR_NUMBER = '09XXXXXXXX'; // የእርስዎን Telebirr ስልክ ቁጥር እዚህ ያስገቡ
+const ADMIN_CHAT_ID = '1921121534'; // የእርስዎ ቴሌግራም ID
+const TELEBIRR_NUMBER = '0930488187'; // የእርስዎ Telebirr ቁጥር
 
 const bot = new Telegraf(BOT_TOKEN);
 const userBalances = {}; // የተጫዋቾች ቀሪ ሂሳብ መያዣ
@@ -63,9 +63,9 @@ bot.hears('📤 Withdraw', (ctx) => {
 });
 
 // የቪአይፒ እና ሰፖርት መልእክቶች
-bot.hears('🆘 Support', (ctx) => ctx.reply('💬 ማንኛውንም ጥያቄ ለማቅረብ አድሚንን ያውሩ፦ @YourAdminUsername'));
+bot.hears('🆘 Support', (ctx) => ctx.reply('💬 ማንኛውንም ጥያቄ ለማቅረብ አድሚንን ያውሩ፦ @MamaNB30'));
 
-bot.launch().then(() => console.log('Bot is running...'));
+bot.launch().then(() => console.log('Telegram Bot successfully started!')).catch(err => console.error(err));
 
 // 2. የቢንጎ ጨዋታ ሎጅክ (Backend Loop)
 let timer = 30;
