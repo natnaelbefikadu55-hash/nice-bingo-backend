@@ -12,29 +12,60 @@ const io = new Server(server, {
   cors: { origin: "*", methods: ["GET", "POST"] }
 });
 
-// 1. የቴሌግራም ቦት ማዋቀር
-const bot = new Telegraf('8968682397:AAHzaLWI-jsyf4e4l02njeGr_xUqlmgedok');
+// 1. የቴሌግራም ቦት እና የአድሚን መረጃዎች
+const BOT_TOKEN = '8968682397:AAHzaLWI-jsyf4e4l02njeGr_xUqlmgedok';
+const ADMIN_CHAT_ID = 'YOUR_TELEGRAM_USER_ID'; // እዚህ ላይ የእርስዎን የቴሌግራም ID ያስገቡ
+const TELEBIRR_NUMBER = '09XXXXXXXX'; // የእርስዎን Telebirr ስልክ ቁጥር እዚህ ያስገቡ
+
+const bot = new Telegraf(BOT_TOKEN);
+const userBalances = {}; // የተጫዋቾች ቀሪ ሂሳብ መያዣ
+
+// የላቁ ቁልፎች (Reply Keyboard)
+const mainKeyboard = Markup.keyboard([
+  [Markup.button.webApp('🎮 Play Now', 'https://natnael-befikadu.vercel.app/?v=1.1')],
+  ['💰 Balance', '📥 Deposit'],
+  ['📤 Withdraw', '🔗 Invite'],
+  ['💎 VIP Room', '🌟 Special Promoter'],
+  ['🆘 Support', '📜 Terms'],
+  ['🎁 Rewards Hub']
+]).resize();
 
 bot.start((ctx) => {
-  const firstName = ctx.from.first_name || 'ተጫዋች';
+  const userId = ctx.from.id;
+  if (!userBalances[userId]) userBalances[userId] = 0;
 
-  ctx.reply(`👋 Welcome back, ${firstName}!\n\nSystem online. Ready to win?`, 
-    Markup.keyboard([
-      [Markup.button.webApp('🎮 Play Now', 'https://natnael-befikadu.vercel.app/?v=1.1')],
-      ['💰 Balance', '📥 Deposit'],
-      ['📤 Withdraw', '🔗 Invite'],
-      ['💎 VIP Room', '🌟 Special Promoter'],
-      ['🆘 Support', '📜 Terms'],
-      ['🎁 Rewards Hub']
-    ]).resize()
+  ctx.reply(`👋 Welcome back, ${ctx.from.first_name}!\n\nSystem online. Ready to win?`, mainKeyboard);
+});
+
+// 💰 Balance
+bot.hears('💰 Balance', (ctx) => {
+  const userId = ctx.from.id;
+  const balance = userBalances[userId] || 0;
+  ctx.reply(`💳 የእርስዎ ቀሪ ሂሳብ፦ ${balance} ETB`);
+});
+
+// 📥 Deposit መመሪያ
+bot.hears('📥 Deposit', (ctx) => {
+  ctx.reply(
+    `📥 *ገንዘብ ገቢ ለማድረግ (Deposit)*\n\n` +
+    `1. በ Telebirr ወደዚህ ቁጥር ብር ይላኩ፦ \`${TELEBIRR_NUMBER}\`\n` +
+    `2. ብሩን ልከው ሲጨርሱ የላኩበትን **Transaction ID** ወይም **የስክሪንሾት ምስል** እዚህ ይላኩ።\n\n` +
+    `ማረጋገጫው እንደደረሰን ሂሳብዎ ወዲያውኑ ይስተካከላል!`,
+    { parse_mode: 'Markdown' }
   );
 });
 
-bot.launch().then(() => {
-  console.log('Telegram Bot successfully started!');
-}).catch((err) => {
-  console.error('Bot Launch Error:', err);
+// 📤 Withdraw መመሪያ
+bot.hears('📤 Withdraw', (ctx) => {
+  const userId = ctx.from.id;
+  const balance = userBalances[userId] || 0;
+  ctx.reply(`📤 ገንዘብ ለማውጣት ያላችሁ ቀሪ ሂሳብ፦ ${balance} ETB\n\nለማውጣት የሚፈልጉትን መጠን እና የ Telebirr ቁጥርዎን ለ Support ይላኩ።`);
 });
+
+// የቪአይፒ እና ሰፖርት መልእክቶች
+bot.hears('🆘 Support', (ctx) => ctx.reply('💬 ማንኛውንም ጥያቄ ለማቅረብ አድሚንን ያውሩ፦ @YourAdminUsername'));
+
+bot.launch().then(() => console.log('Bot is running...'));
 
 // 2. የቢንጎ ጨዋታ ሎጅክ (Backend Loop)
 let timer = 30;
