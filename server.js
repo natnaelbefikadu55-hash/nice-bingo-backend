@@ -7,7 +7,6 @@ const { Telegraf, Markup } = require('telegraf');
 const app = express();
 app.use(cors());
 
-// Render ጤናማ መሆኑን ማረጋገጫ (Health Check)
 app.get('/', (req, res) => {
   res.send('Nice Bingo Server & Telegram Bot are running live!');
 });
@@ -17,14 +16,13 @@ const io = new Server(server, {
   cors: { origin: "*", methods: ["GET", "POST"] }
 });
 
-// 1. መረጃዎች - አዲሱ Bot Token እዚህ ገብቷል
-const BOT_TOKEN = process.env.BOT_TOKEN || '8968682397:AAEIWrAnUYKD0Mk_RnYZoGz_Lf21aLAu1ME';
+// 1. ቦት ቶከን ቀጥታ እዚህ ተጽፏል
+const BOT_TOKEN = '8968682397:AAEIWrAnUYKD0Mk_RnYZoGz_Lf21aLAu1ME';
 const TELEBIRR_NUMBER = '0930488187';
 
 const bot = new Telegraf(BOT_TOKEN);
 const userBalances = {};
 
-// የቁልፍ አደራደር
 const mainKeyboard = Markup.keyboard([
   [Markup.button.webApp('🎮 Play Now', 'https://natnael-befikadu.vercel.app/?v=1.1')],
   ['💰 Balance', '📥 Deposit'],
@@ -141,7 +139,7 @@ io.on('connection', (socket) => {
 
 startTimer();
 
-// 3. ሰርቨሩን ማስነሳት እና ቦቱን ማስጀመር
+// 3. ሰርቨሩን ማስነሳት
 const PORT = process.env.PORT || 10000;
 server.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
