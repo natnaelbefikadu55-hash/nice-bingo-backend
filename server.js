@@ -17,8 +17,8 @@ const io = new Server(server, {
   cors: { origin: "*", methods: ["GET", "POST"] }
 });
 
-// 1. መረጃዎች - አዲሱን Token እዚህ ውስጥ ' ' መሃል ይተኩ
-const BOT_TOKEN = process.env.BOT_TOKEN || 'አዲሱን_TOKEN_እዚህ_ያስገቡ';
+// 1. መረጃዎች - አዲሱ Bot Token እዚህ ገብቷል
+const BOT_TOKEN = process.env.BOT_TOKEN || '8968682397:AAH_LwYYUvsKfBdcXW274tgf5UEbKoBblbM';
 const TELEBIRR_NUMBER = '0930488187';
 
 const bot = new Telegraf(BOT_TOKEN);
