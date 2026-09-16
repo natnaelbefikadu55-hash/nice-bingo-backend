@@ -143,15 +143,13 @@ startTimer();
 
 // 3. ሰርቨሩን ማስነሳት እና ቦቱን ማስጀመር
 const PORT = process.env.PORT || 10000;
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
   
-  // ቦቱን ከሰርቨሩ በኋላ ማስነሳት
-  bot.launch()
-    .then(() => console.log('Telegram Bot successfully started!'))
-    .catch((err) => console.error('Bot launch error:', err));
+  try {
+    await bot.launch();
+    console.log('Telegram Bot successfully started!');
+  } catch (err) {
+    console.error('Bot launch error:', err);
+  }
 });
-
-// ሰርቨሩ በሰላም እንዲዘጋ
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
