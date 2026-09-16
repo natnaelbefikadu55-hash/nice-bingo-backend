@@ -18,7 +18,7 @@ const io = new Server(server, {
 });
 
 // 1. መረጃዎች - አዲሱ Bot Token እዚህ ገብቷል
-const const BOT_TOKEN = process.env.BOT_TOKEN|| '8968682397:AAH_LwYYUvsKfBdcXW274tgf5UEbKoBblbM';
+const BOT_TOKEN = process.env.BOT_TOKEN || '8968682397:AAEIWrAnUYKD0Mk_RnYZoGz_Lf21aLAu1ME';
 const TELEBIRR_NUMBER = '0930488187';
 
 const bot = new Telegraf(BOT_TOKEN);
